@@ -36,6 +36,7 @@ from Quartz import (
     kCGNullWindowID
 )
 from PyObjCTools import AppHelper
+import appscript
 import config as cfg
 import signal
 import time
@@ -181,8 +182,11 @@ class Sniffer:
                         for window in windowList:
                             if window['kCGWindowOwnerName'] == app_name:
                                 geometry = window['kCGWindowBounds']
+                                windowname = window.get('kCGWindowName', u'')
+                                if app_name == "Google Chrome":
+                                    windowname = appscript.app("Google Chrome").windows.active_tab.URL()[0] + " " + windowname
                                 self.screen_hook(window['kCGWindowOwnerName'],
-                                                 window.get('kCGWindowName', u''),
+                                                 windowname,
                                                  geometry['X'],
                                                  geometry['Y'],
                                                  geometry['Width'],
